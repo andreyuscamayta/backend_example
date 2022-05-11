@@ -7,4 +7,5 @@ urlpatterns = [
     path('users/', views.users, name='users'),
     path('users/<int:user_id>/', views.get_user),
     path('users/new/', views.save_user),
+    path('users/validation/', views.validate_user),
 ]
