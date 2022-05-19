@@ -26,13 +26,15 @@ def get_user(request, user_id):
 	user = Person.objects.get(pk=user_id)
 	return JsonResponse(convert_user_object_to_dic(user), safe=False)
 
+@csrf_exempt
 def validate_user(request):
 	print(request.body)
-	body = json.loads(request.body)
-	person = Person.objects.get(user__username=body["username"])
-	if(person.user.check_password(body["password"])):
-		return JsonResponse(convert_user_object_to_dic(person), safe=False)
-	return HttpResponseNotFound('<h1>User not found</h1>')
+	if request.method == "POST":
+		body = json.loads(request.body)
+		person = Person.objects.get(user__username=body["username"])
+		if(person.user.check_password(body["password"])):
+			return JsonResponse(convert_user_object_to_dic(person), safe=False)
+		return HttpResponseNotFound('<h1>User not found</h1>')
 
 @csrf_exempt
 def save_user(request):
